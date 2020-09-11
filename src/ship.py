@@ -13,6 +13,16 @@ class Ship:
 
         # Start every new ship at the bottom centre of the screen
         self.rect.midbottom = self.screen_rect.midbottom
+
+        self.moving_right = False
+        self.moving_left = False
+
+    def update_movement(self):
+        if self.moving_right:
+            self.rect.x += 1
+        
+        if self.moving_left:
+            self.rect.x -= 1
  
     def blitme(self):
         """ This draws the ship """
