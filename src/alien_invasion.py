@@ -12,11 +12,11 @@ class AlienInvasion:
     def __init__(self):
         """Starts the game, and create game resources"""
         pygame.init()
-        
         self.settings = Settings()
 
-        self.screen = pygame.display.set_mode(
-            (self.settings.screen_width, self.settings.screen_height))
+        self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        self.settings.screen_width = self.screen.get_rect().width
+        self.settings.screen_height = self.screen.get_rect().height
         
         pygame.display.set_caption("Alien Invasion")
         
@@ -31,23 +31,29 @@ class AlienInvasion:
             self.ship.update_movement()
 
     def _check_events(self):         
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    sys.exit()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                self._check_keydown_events(event)
+            elif event.type == pygame.KEYUP:
+                self.check_keyup_events(event)
 
-            # If a buttun is pushed
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_RIGHT:
-                        self.ship.moving_right = True
-                    elif event.key == pygame.K_LEFT:
-                        self.ship.moving_left = True
+    def _check_keydown_events(self, event):
+        # If a buttun is pushed
+        if event.key == pygame.K_RIGHT:
+            self.ship.moving_right = True
+        elif event.key == pygame.K_LEFT:
+            self.ship.moving_left = True
+        elif event.key == pygame.K_q:
+            sys.exit()    
 
-            # If a button is let go                       
-                elif event.type == pygame.KEYUP:
-                    if event.key == pygame.K_RIGHT:
-                        self.ship.moving_right = False
-                    elif event.key == pygame.K_LEFT:
-                        self.ship.moving_left = False
+    def check_keyup_events(self, event):
+        # If a button is let go                            
+        if event.key == pygame.K_RIGHT:
+            self.ship.moving_right = False
+        elif event.key == pygame.K_LEFT:
+            self.ship.moving_left = False
 
 
 
