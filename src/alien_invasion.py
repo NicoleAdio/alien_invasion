@@ -32,6 +32,11 @@ class AlienInvasion:
             self.ship.update_movement()
             self.bullets.update()
             self._update_screen()
+            # Get rid of bullets that have dissapered:
+            for bullet in self.bullets.copy():
+                if bullet.rect.bottom <= 0:
+                    self.bullets.remove(bullet)
+                   
 
     def _check_events(self):         
         for event in pygame.event.get():
@@ -50,6 +55,8 @@ class AlienInvasion:
             self.ship.moving_left = True
         elif event.key == pygame.K_q:
             sys.exit()    
+        elif event.key == pygame.K_SPACE:
+            self._fire_bullet()
 
     def check_keyup_events(self, event):
         # If a button is let go                            
@@ -58,14 +65,20 @@ class AlienInvasion:
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = False
 
-
+    def _fire_bullet(self):
+        if len(self.bullets) < self.settings.bullets_allowed:
+            new_bullet = Bullet(self)
+            self.bullets.add(new_bullet)
+ 
 
     def _update_screen(self):
         """ Updates the screen and flips to the new screen"""
-    
         # Redraw the screen everytime the loop is passed
         self.screen.fill(self.settings.bg_colour)
         self.ship.blitme()
+        for bullet in self.bullets.sprites():
+            bullet.draw_bullet()
+
         
         pygame.display.flip()
 
